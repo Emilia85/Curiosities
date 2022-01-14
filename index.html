@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play</title>
+    <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?size=626&ext=jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 20px;
+        font-family: Arial;
+    }
+
+    .logo{
+        width:100px;
+    }
+    .logo img{
+        width:100px;
+    }
+
+    .lang-menu{
+        display: flex;
+        margin-top: -10px;
+        margin-left: -35px;
+        justify-content: center;
+        z-index: 1;
+    }
+    .selected-lang{
+        cursor: pointer;
+        display:inline-block;
+        justify-content: space-between;
+        line-height:2;
+        width: 100px;
+    }
+    .selected-lang:before{
+        content:'';
+        display:inline-block;
+        text-align:center; 
+        background-image: url(https://i.pinimg.com/originals/3b/c0/a4/3bc0a4a8e39bb561d24c0a9d7a7f0c07.png);
+        width: 40px;
+        height: 33px;
+    }
+    .lang-menu ul{
+        margin:0;
+        padding:0;
+        background-color:rgb(198, 247, 162);
+        /*width: 1px; Adaugand latimea, mi-a iesit doar o dunga in loc de o cutie la limba*/
+        border:1px solid #f8f8f8;
+        box-shadow:0px 1px 10px rgba(0,0,0,0.2);
+        border-radius: 5px;
+        display: none;
+        position : absolute;
+        top: 40px;
+        left: 20;
+    }
+    .lang-menu ul li{
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+    }
+    .lang-menu ul li a{
+        text-decoration: none;
+        width: 146px;
+        display:inline-block;
+        padding: 5px 10px;
+    }
+    .lang-menu ul li a:before{
+        content:'';
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        margin-right:10px;
+        vertical-align: middle;
+    }
+    .lang-menu ul li a:hover{
+        background-color: rgb(117, 237, 161);
+        opacity: 0.9;
+    }
+    .de:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Germany-icon.png);
+    }
+    .us:before{
+        background-image: url(https://icons.iconarchive.com/icons/icons-land/vista-flags/32/United-States-Flag-1-icon.png);
+    }
+    .fr:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/France-icon.png);
+    }
+    .it:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Italy-icon.png);
+    }
+    .ro:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Romania-icon.png);
+    }
+    .es:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Spain-icon.png);
+    }
+    .pt:before{
+        background-image: url(https://icons.iconarchive.com/icons/hopstarter/flag-borderless/32/Portugal-icon.png);
+    }
+    .lang-menu:hover ul{
+        display: block;
+    }
+    h1{
+        /*display: flex;
+        align-items: center;
+        justify-content: center;*/
+        text-align: center;
+        padding: 20px;
+        color: black;
+        text-shadow: 2px 2px 8px salmon;
+    }
+
+    .principal {
+        max-width: 1000px;
+        margin: auto;
+    }
+
+
+    .card {
+        background-color:  wheat;
+        padding: 10px;
+        margin-top:30px;
+    }
+    
+    p{
+        text-align: center;
+    }
+    .but{
+        padding: 0 20px;
+        border: none;
+        outline: none;
+        background-color: rgb(55, 119, 134);
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 20px;
+        display: block;
+        margin: 30px auto;
+        transition: 00.2s ease;
+        animation: mymove 5s infinite;    
+    }
+    
+    @keyframes mymove {
+        50% {box-shadow: 10px 20px 30px rgb(0, 208, 255);}
+    }
+    
+</style>
+    <script>
+
+    var limba = "ro";
+            var x = document.getElementsByClassName("first");
+    
+            function getLocation() {
+                          if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(OnPositionRetrieved);
+                          } 
+                          else { 
+                                x.innerHTML = "Geolocation is not supported by this browser.";
+                          }
+            }
+    
+            function OnPositionRetrieved(position) {
+                                    x = document.getElementsByClassName("first");
+                                      x.innerHTML = "Latitude: " + position.coords.latitude + 
+                                    "<br>Longitude: " + position.coords.longitude;
+            }
+           
+    
+        var txtCautare = document.getElementsByClassName("first");
+    
+        window.onload = function Search() {
+        var locale = getLocaleLanguage();
+        var locales = [
+            { name: "English", value: "en" },
+            { name: "Deutsch", value: "de" },
+            { name: "Français<", value: "fr" },
+            { name: "Italiano<", value: "it" },
+            { name: "Romana<", value: "ro" },
+            { name: "Español<", value: "esp" },
+            { name: "Português<", value:"pt"}
+    
+        ];
+        getLocation();//Aflu limba vorbita in functie de locatia unde ma aflu
+        }
+    //Site-ul se va deschide automat in limba vorbita in    locul unde ma aflu
+        function getLocaleLanguage() {
+                var limba_preferata = navigator.language.substr(0, 2);
+        
+                if (limba_preferata == "en") 
+                            English();
+                    else if(limba_preferata == "de")
+                            Germana();
+                    else if(limba_preferata == "fr")
+                            French();
+                    else if(limba_preferata == "it")
+                            Italian();
+                    else if(limba_preferata == "ro")
+                            Romanian();
+                    else if(limba_preferata == "esp")
+                            Spanish();
+                    else if(limba_preferata == "pt")
+                            Portuguese();
+                    
+                    else
+                            English();
+        
+        } 
+
+        function English(){
+
+                document.getElementById("titlu").innerHTML= "Curiosities and Play \uD83D\uDE00";
+
+                document.getElementById("ghici").innerHTML = "The secret of genius is to carry the spirit of the child into old age, which means never losing your enthusiasm. Aldous Huxley ";
+                document.getElementById("numar").innerHTML = "Guess what number I'm thinking!";
+                document.getElementById("intrebari").innerHTML = "Many of life's failures are people who did not realize how close they were to success when they gave up. Thomas A. Edison";
+                document.getElementById("curiozitati").innerHTML = "Are you ready for some questions?";
+                document.getElementById("stele").innerHTML = "The sun is the closest star to Earth, we see all the others in the form of a bright curtain due to the great distance between the stars and the Earth. The stars have been studied since ancient times, they have a special importance on people, whether we are talking about religious practices or for navigation. In 1584, Giordano Bruno wrote that the stars may be other suns around planets, possibly even Earth-like.";
+                document.getElementById("soare").innerHTML = "Click here for questions about \u2728";
+                document.getElementById("iarna").innerHTML = "The first fall of snow is not only an event, but it is a magical event. You go to bed in one kind of world and wake up to find yourself in another quite different, and if this is not enchantment, then where is it to be found? J.B. Priestley";
+                document.getElementById("primavara").innerHTML = "In the Spring, I have counted 136 different kinds of weather inside of 24 hours. Mark Twain";
+                document.getElementById("vara").innerHTML = "A summer is always exceptional, be it hot or cold, dry or humid. Gustave Flaubert";
+                document.getElementById("toamna").innerHTML = "As long as autumn lasts, I shall not have hands, canvas and colors enough to paint the beautiful things I see. Vincent Van Gogh";
+
+                document.getElementById("numar").onclick = GhiciE;
+                document.getElementById("curiozitati").onclick = IntrebariE;
+                document.getElementById("soare").onclick = SteaE;
+                document.getElementById("zapada").onclick = AfiseazaIE;
+                document.getElementById("inmugurit").onclick = AfiseazaPE;
+                document.getElementById("cald").onclick = AfiseazaVE;
+                document.getElementById("auriu").onclick = AfiseazaTE;
+
+                limba = "en";   
+
+        }
+
+        function GhiciE(){
+
+                    var nr=Math.floor(Math.random() * 100);
+                do{
+                    var p=prompt('Guess the number:');
+                    var ghici=parseInt(p);
+                    if(ghici<nr)
+                        alert('Bigger!');
+                    if(ghici>nr)
+                        alert('Smaller!');
+                }
+                while(ghici!=nr);
+                        alert('You guessed it, are you ready for the next level?!');
+                    
+        }   
+
+        function IntrebariE(){
+
+                var geo=prompt('Does the Alps mountain range pass through Romania?');
+                var mun=(geo=='no')?'Exactly, the Alps mountain range does not pass through Romania!':'The only mountain range that passes through Romania is the Carpathian Mountains!';
+                    alert(mun);
+                    
+                var intrebare=prompt('4*4=?');
+                var raspuns=(intrebare==16)?'You answered correctly!':'The correct answer is 16, next time try to be more careful!';
+                    alert(raspuns);
+
+                var x=prompt('Christmas is celebrated on ...?');
+                var y=(x=='December 25')?'You answered correctly, Christmas is celebrated by all Christians on December 25!':'Christmas is celebrated by all Christians on December 25th, while on January 7th Christmas is celebrated according to the old rite!';
+                    alert(y);                    
+                    
+                var z1=prompt('20*0=?');
+                var s1=(z1==0)?'Exactly because any number multiplied by 0 will have the result 0!':'The result of any number multiplied by 0 will be 0, try to be more focused!';
+                    alert(s1);                    
+
+                var g=prompt('7*7=?');
+                var n=(g==49)?'Congratulations, you answered correctly!':"The answer is 49, but rest assured math is not everyone's strength!";
+                    alert(n);                    
+
+                var mat=prompt('1*5*9*7*5*3*0*1*4*7=132.300?');
+                var cup=(mat=='no')?'Congratulations, you answered correctly because any number multiplied by 0 will have the result 0!':'Wrong, the answer is not because any number multiplied by 0 will have the result 0, but at least you tried!';
+                    alert(cup);                    
+                    
+                var con=prompt('What continent is missing: Africa, North America, South America, Antarctida, Asia, Australia ...');
+                var tin =(con=='Europe')?'Congratulations, you answered correctly!':'The right answer is Europe!';
+                    alert(tin);                    
+                    
+                var ever=prompt('The highest point on earth is the peak ...');
+                var inal=(ever=='Everest')?'Congratulations, you answered correctly!':'Everest Peak is part of the Himalayan mountains, with a height of 29,029 feet (8848m)!';
+                    alert(inal);
+
+                var flu=prompt('The longest rivers in Europe are: Volga-3,692, Danube-2,860, Ural-2,428, is the measured length in meters or kilometers?');
+                var viu=(flu=='kilometers')?'Congratulations, you answered correctly!':'The length for the longest rivers in Europe is measured in kilometers.';
+                    alert(viu);
+
+        }
+
+        function SteaE(){
+
+                do{
+                    var intreb = prompt('How far is the farthest star in the universe we have ever seen?');
+                    var a = 3;
+                    var b = 5;
+                    var c = 9;
+                    
+                    if(intreb <=a)
+                        alert("Don't forget that we are talking about the distance measured in light years!");
+                    else if(intreb <= b)
+                        alert('Proxima Centauri, is a red dwarf star that is about 4.2 light-years from Earth!');
+                    else if(intreb==c)
+                        alert('Icarus is 9 billion light-years from our solar system, it is the farthest star in the universe we have ever seen!');	
+                }
+                while(intreb!=c);
+        }
+
+        function AfiseazaIE(){
+
+                alert('During this period the maximum temperature is 10 \u2103 while the minimum can reach -20 \u2103 (50 \xB0F and -4 \xB0F)! Winter is the season that allows us all to become children again!');
+
+        }
+
+        function AfiseazaPE(){
+
+                alert("Spring is the season with a minimum temperature of 11 \u2103 and a maximum of 28 \u2103 (51.8 \xB0F and 82.4 \xB0F)! Set aside time to admire nature's rebirth!");
+
+        }
+
+        function AfiseazaVE(){
+
+                alert('Temperatures are between 25 \u2103 and 42 \u2103 (77 \xB0F and 107.60 \xB0F)! Enjoy everything summer has to offer!');
+
+        }
+
+        function AfiseazaTE(){
+
+                alert("The temperature during this period is between 8 \u2103 and 23 \u2103 (46.4 \xB0F and 73.4 \xB0F)! It's autumn, don't forget to take an umbrella with you, because there are chances of rain!");
+
+        }
+
+        function Germana(){
+
+                document.getElementById("titlu").innerHTML= "Kurioses und Spiel \uD83D\uDE00";
+
+                document.getElementById("ghici").innerHTML = "Das Geheimnis des Genies besteht darin, den Geist des Kindes ins hohe Alter zu tragen, was bedeutet, dass Sie niemals Ihre Begeisterung verlieren. Aldous Huxley";
+                document.getElementById("numar").innerHTML = "Ratet mal, welche Zahl ich denke!";
+                document.getElementById("intrebari").innerHTML = "Viele Misserfolge im Leben sind Menschen, die nicht wussten, wie nahe sie dem Erfolg waren, als sie aufgeben. Thomas A. Edison";
+                document.getElementById("curiozitati").innerHTML = "Sind Sie bereit für einige Fragen?";
+                document.getElementById("stele").innerHTML = "Die Sonne ist der erdnächste Stern, alle anderen sehen wir aufgrund der großen Entfernung zwischen den Sternen und der Erde in Form eines hellen Vorhangs. Die Sterne werden seit der Antike untersucht, sie haben eine besondere Bedeutung für den Menschen, sei es über religiöse Praktiken oder für die Navigation. Im Jahr 1584 schrieb Giordano Bruno, dass die Sterne andere Sonnen um Planeten sein könnten, möglicherweise sogar erdähnlich.";
+                document.getElementById("soare").innerHTML = "Klicken Sie hier für Fragen zu \u2728";
+                document.getElementById("iarna").innerHTML = "Der erste Schneefall ist nicht nur ein Ereignis, sondern ein magisches Ereignis. Sie gehen in einer Welt zu Bett und wachen auf, um sich in einer anderen wiederzufinden, und wenn das keine Verzauberung ist, wo ist sie dann zu finden? J. B. Priestley";
+                document.getElementById("primavara").innerHTML = "Im Frühling habe ich 136 verschiedene Wetterarten innerhalb von 24 Stunden gezählt. Mark Twain";
+                document.getElementById("vara").innerHTML = "Ein Sommer ist immer außergewöhnlich, egal ob heiß oder kalt, trocken oder feucht. Gustave Flaubert";
+                document.getElementById("toamna").innerHTML = "Solange der Herbst dauert, werde ich nicht genug Hände, Leinwand und Farben haben, um die schönen Dinge zu malen, die ich sehe. Vincent van Gogh";
+
+                document.getElementById("numar").onclick = GhiciD;
+                document.getElementById("curiozitati").onclick = IntrebariD;
+                document.getElementById("soare").onclick = SteaD;
+                document.getElementById("zapada").onclick = AfiseazaID;
+                document.getElementById("inmugurit").onclick = AfiseazaPD;
+                document.getElementById("cald").onclick = AfiseazaVD;
+                document.getElementById("auriu").onclick = AfiseazaTD;
+
+                limba = "de";
+
+        }
+
+        function GhiciD(){
+
+                    var nr=Math.floor(Math.random() * 100);
+                do{
+                    var p=prompt('Rate mal die Zahl:');
+                    var ghici=parseInt(p);
+                    if(ghici<nr)
+                        alert('Größer!');
+                    if(ghici>nr)
+                        alert('Kleiner!');
+                }
+                while(ghici!=nr);
+                        alert('Du hast es erraten, bist du bereit für das nächste Level?!');
+                    
+        }
+
+        function IntrebariD(){
+
+                var geo=prompt('Durchquert Rumänien die Alpen?');
+                var mun=(geo=='nein')?'Genau, die Alpenkette geht nicht durch Rumänien!':'Das einzige Gebirge, das Rumänien durchquert, sind die Karpaten!';
+                    alert(mun);
+                        
+                var intrebare=prompt('4*4=?');
+                var raspuns=(intrebare==16)?'Du hast richtig geantwortet!':'Die richtige Antwort ist 16, versuchen Sie beim nächsten Mal, vorsichtiger zu sein!';
+                    alert(raspuns);
+                        
+                var x=prompt('Weihnachten wird gefeiert am ...?');
+                var y=(x=='25. dezember')?'Sie haben richtig geantwortet, Weihnachten feiern alle Christen am 25. Dezember!':'Weihnachten wird von allen Christen am 25. Dezember gefeiert, während am 7. Januar Weihnachten nach altem Ritus gefeiert wird!';
+                    alert(y);
+                            
+                var z1=prompt('20*0=?');
+                var s1=(z1==0)?'Genau, weil jede Zahl multipliziert mit 0 das Ergebnis 0 ergibt!':'Das Ergebnis jeder Zahl multipliziert mit 0 ist 0, versuchen Sie, konzentrierter zu sein!';
+                    alert(s1);                        
+
+                var g=prompt('7*7=?');
+                var n=(g==49)?'Herzlichen Glückwunsch, du hast richtig geantwortet!':"Die Antwort ist 49, aber seien Sie versichert, dass Mathematik nicht jedermanns Stärke ist!";
+                    alert(n);                        
+
+                var mat=prompt('1*5*9*7*5*3*0*1*4*7=132.300?');
+                var cup=(mat=='nein')?'Herzlichen Glückwunsch, Sie haben richtig geantwortet, denn jede Zahl multipliziert mit 0 ergibt 0!':'Falsch, die Antwort ist nicht, weil jede Zahl, die mit 0 multipliziert wird, das Ergebnis 0 ergibt, aber Sie haben es zumindest versucht!';
+                    alert(cup);                        
+                        
+                var con=prompt('Welcher Kontinent fehlt: Afrika, Nordamerika, Südamerika, Antarktis, Asien, Australien ...');
+                var tin =(con=='Europa')?'Herzlichen Glückwunsch, du hast richtig geantwortet!':'Die richtige Antwort ist Europa!';
+                    alert(tin);                        
+                        
+                var ever=prompt('Der höchste Punkt der Erde ist der Gipfel ...');
+                var inal=(ever=='Everest')?'Herzlichen Glückwunsch, du hast richtig geantwortet!':'Der Everest Peak ist ein Teil des Himalaya-Gebirges mit einer Höhe von 8848 m!';
+                    alert(inal);
+
+                var flu=prompt('Die längsten Flüsse in Europa sind: Wolga-3.692, Donau-2.860, Ural-2.428, ist die gemessene Länge in Metern oder Kilometern?');
+                var viu=(flu=='Kilometern')?'Herzlichen Glückwunsch, du hast richtig geantwortet!':'Die Länge der längsten Flüsse Europas wird in Kilometern gemessen.';
+                    alert(viu);
+
+        }
+
+        function SteaD(){
+
+                do{
+                    var intreb = prompt('Wie weit ist der am weitesten entfernte Stern im Universum, den wir je gesehen haben?');
+                    var a = 3;
+                    var b = 5;
+                    var c = 9;
+                    
+                    if(intreb <=a)
+                        alert("Vergessen Sie nicht, dass es sich um die in Lichtjahren gemessene Entfernung handelt!");
+                    else if(intreb <= b)
+                        alert('Proxima Centauri ist ein roter Zwergstern, der etwa 4,2 Lichtjahre von der Erde entfernt ist!');
+                    else if(intreb==c)
+                        alert('Ikarus ist 9 Milliarden Lichtjahre von unserem Sonnensystem entfernt, es ist der am weitesten entfernte Stern im Universum, den wir je gesehen haben!');	
+                }
+                while(intreb!=c);
+        }
+
+        function AfiseazaID(){
+
+                alert('Während dieser Zeit beträgt die Höchsttemperatur 10 \u2103, während die Mindesttemperatur -20 \u2103 erreichen kann! Der Winter ist die Jahreszeit, in der wir alle wieder Kinder werden können!');
+
+        }
+
+        function AfiseazaPD(){
+
+                alert("Frühling ist die Jahreszeit mit einer Mindesttemperatur von 11 \u2103 und einer Höchsttemperatur von 28 \u2103! Nehmen Sie sich Zeit, um die Wiedergeburt der Natur zu bewundern!");
+
+        }
+
+        function AfiseazaVD(){
+
+                alert('Die Temperaturen liegen zwischen 25 \u2103 und 42 \u2103! Genießen Sie alles, was der Sommer zu bieten hat!');
+
+        }
+
+        function AfiseazaTD(){
+
+                alert("Die Temperatur während dieser Zeit liegt zwischen 8 \u2103 und 23 \u2103! Es ist Herbst, nicht vergessen einen Regenschirm mitzunehmen, denn es kann regnen!");
+
+        }
+
+        function French(){
+
+                document.getElementById("titlu").innerHTML= "Curiosités et Jeu \uD83D\uDE00";
+
+                document.getElementById("ghici").innerHTML = "Le secret des génies c'est d'emmener san âme d'enfant jusqu'à ses vieux jours. Ce qui veut dire, ne jamais perdre san enthousiasme. Aldous Huxley";
+                document.getElementById("numar").innerHTML = "Devinez à quel numéro je pense !";
+                document.getElementById("intrebari").innerHTML = "Beaucoup d'échecs dans la vie sont des personnes qui n'ont pas réalisé à quel point elles étaient près du succès quand elles ont abandonné. Thomas A. Edison";
+                document.getElementById("curiozitati").innerHTML = "Êtes-vous prêt pour quelques questions?";
+                document.getElementById("stele").innerHTML = "Le soleil est l'étoile la plus proche de la Terre, nous voyons toutes les autres sous la forme d'un rideau lumineux dû à la grande distance entre les étoiles et la Terre. Les étoiles sont étudiées depuis l'Antiquité, elles ont une importance particulière pour l'homme, qu'il s'agisse de pratiques religieuses ou de navigation. En 1584, Giordano Bruno écrivit que les étoiles pourraient être d'autres soleils autour des planètes, peut-être même similaires à la Terre.";
+                document.getElementById("soare").innerHTML = "Cliquez ici pour les questions concernant le \u2728";
+                document.getElementById("iarna").innerHTML = "La première chute de neige n'est pas seulement un événement, c'est un événement magique. Vous vous couchez dans un genre de monde et vous vous réveillez dans un autre tout à fait différent. J.B. Priestley";
+                document.getElementById("primavara").innerHTML = "Au printemps, j'ai compté 136 types de temps différents en 24 heures. Mark Twain";
+                document.getElementById("vara").innerHTML = "Un été est toujours exceptionnel, qu'il soit chaud ou froid, sec ou humide. Gustave Flaubert";
+                document.getElementById("toamna").innerHTML = "Tant qu'il y aura l'automne, je n'aurai pas assez de mains, de toiles et de couleurs pour peindre la beauté que je vois. Vincent Van Gogh";
+
+                document.getElementById("numar").onclick = GhiciF;
+                document.getElementById("curiozitati").onclick = IntrebariF;
+                document.getElementById("soare").onclick = SteaF;
+                document.getElementById("zapada").onclick = AfiseazaIF;
+                document.getElementById("inmugurit").onclick = AfiseazaPF;
+                document.getElementById("cald").onclick = AfiseazaVF;
+                document.getElementById("auriu").onclick = AfiseazaTF;
+
+
+                limba = "fr";   
+
+        }
+
+        function GhiciF(){
+
+                var nr=Math.floor(Math.random() * 100);
+                do{
+                    var p=prompt('Devinez le nombre:');
+                    var ghici=parseInt(p);
+                    if(ghici<nr)
+                        alert('Plus gros!');
+                    if(ghici>nr)
+                        alert('Plus petite!');
+                }
+                while(ghici!=nr);
+                        alert("Vous l'avez deviné, êtes-vous prêt pour le prochain niveau?!");
+                
+        }
+
+        function IntrebariF(){
+
+                var geo=prompt('La chaîne de montagnes des Alpes passe-t-elle par la Roumanie?');
+                var mun=(geo=='non')?"C'est vrai, la chaîne de montagnes des Alpes ne passe pas par la Roumanie!":"La seule chaîne de montagnes qui traverse la Roumanie sont les Carpates!";
+                    alert(mun);
+                        
+                var intrebare=prompt('4*4=?');
+                var raspuns=(intrebare==16)?'Vous avez répondu correctement!':'La bonne réponse est 16, la prochaine fois, fais plus attention!';
+                    alert(raspuns);        
+
+                var x=prompt('Est-ce que Noël est célébré le ...?');
+                var y=(x=='25 décembre')?"Vous avez bien répondu, le 25 Décembre tous les chrétiens fêtent Noël!":"Noël est célébré par tous les chrétiens le 25 Décembre, tandis que le 7 Janvier, Noël est célébré selon l'ancien rite !";
+                    alert(y);        
+                        
+                var z1=prompt('20*0=?');
+                var s1=(z1==0)?"Exactement parce que tout nombre multiplié par 0 aura pour résultat 0!":"Le résultat de n'importe quel nombre multiplié par 0 sera 0, essayez d'être plus concentré!";
+                    alert(s1);        
+
+                var g=prompt('7*7=?');
+                var n=(g==49)?'Félicitations, vous avez répondu correctement!':"La réponse est 49, mais je vous assure que les maths ne sont pas le point fort de tout le monde!";
+                    alert(n);
+                        
+                var mat=prompt('1*5*9*7*5*3*0*1*4*7=132.300?');
+                var cup=(mat=='non')?'Félicitations, vous avez répondu correctement car tout nombre multiplié par 0 aura le résultat 0!':'Faux, la réponse est non, car tout nombre multiplié par 0 aura pour résultat 0, mais au moins vous avez essayé!';
+                    alert(cup);
+                                
+                var con=prompt('Quel continent manque: Afrique, Amérique du Nord, Amérique du Sud, Antarctique, Asie, Australie...');
+                var tin =(con=="L'Europe")?"Félicitations, vous avez répondu correctement!":"La bonne réponse est l'Europe!";
+                    alert(tin);        
+                        
+                var ever=prompt('Le point culminant de la terre est le pic...');
+                var inal=(ever=="L'Everest")?"Félicitations, vous avez répondu correctement!":"L'Everest Peak fait partie des montagnes de l'Himalaya, avec une altitude de 8848 m!";
+                    alert(inal);
+
+                var flu=prompt("Les fleuves les plus longs d'Europe sont: Volga-3.692, Danube-2.860, Oural-2.428, la longueur est-elle mesurée en mètres ou en kilomètres?");
+                var viu=(flu=='kilomètres')?"Félicitations, vous avez répondu correctement!":"La longueur des plus longs fleuves d'Europe se mesure en kilomètres.";
+                    alert(viu);
+
+        }
+
+        function SteaF(){
+
+                do{
+                    var intreb = prompt("À quelle distance se trouve l'étoile la plus éloignée de l'univers que nous ayons jamais vue ?");
+                    var a = 3;
+                    var b = 5;
+                    var c = 9;
+                            
+                    if(intreb <=a)
+                        alert("N'oubliez pas que nous parlons de distance mesurée en années-lumière!");
+                    else if(intreb <= b)
+                        alert('Proxima Centauri, est une étoile naine rouge située à environ 4,2 années-lumière de la Terre!');
+                    else if(intreb==c)
+                        alert("Icare est à 9 milliards d'années-lumière de notre système solaire, c'est l'étoile la plus éloignée de l'univers que nous ayons jamais vue!");	
+                }
+                while(intreb!=c);
+        }
+
+        function AfiseazaIF(){
+
+                alert("Pendant cette période la température maximale est de 10 \u2103 tandis que la minimale peut atteindre -20 \u2103! L'hiver est la saison qui nous permet à tous de redevenir des enfants!");
+
+        }
+
+        function AfiseazaPF(){
+
+                alert("Le printemps est la saison avec une température minimale de 11 \u2103 et maximale de 28 \u2103! Prenez le temps d'admirer la renaissance de la nature!");
+
+        }
+
+        function AfiseazaVF(){
+
+                alert("Les températures sont comprises entre 25 \u2103 et 42 \u2103! Profitez de tout ce que l'été a à offrir!");
+
+        }
+
+        function AfiseazaTF(){
+
+                alert("La température durant cette période est de 8 \u2103 à 23 \u2103! C'est l'automne, n'oubliez pas de prendre un parapluie avec vous, car il y a un risque qu'il pleuve!");
+
+        }
+
+        function Italian(){
+
+                document.getElementById("titlu").innerHTML= "Curiosità e Gioco \uD83D\uDE00";
+
+                document.getElementById("ghici").innerHTML = "Il segreto del genio è portare lo spirito del bambino nella vecchiaia, il che significa non perdere mai l'entusiasmo. Aldous Huxley";
+                document.getElementById("numar").innerHTML = "Indovina a che numero sto pensando!";
+                document.getElementById("intrebari").innerHTML = "Molti dei fallimenti della vita sono persone che non si sono rese conto di quanto fossero vicine al successo quando si sono arrese. Thomas A. Edison";
+                document.getElementById("curiozitati").innerHTML = "Sei pronto per alcune domande?";
+                document.getElementById("stele").innerHTML = "Il sole è la stella più vicina alla Terra, tutte le altre le vediamo sotto forma di una tenda luminosa a causa della grande distanza tra le stelle e la Terra. Le stelle sono state studiate fin dall'antichità, hanno un'importanza speciale sulle persone, sia che si parli di pratiche religiose che per la navigazione. Nel 1584, Giordano Bruno scrisse che le stelle potrebbero essere altri soli attorno ai pianeti, forse anche simili alla Terra.";
+                document.getElementById("soare").innerHTML = "Click qui per domande riguardanti le \u2728";
+                document.getElementById("iarna").innerHTML = "La prima nevicata non è solo un evento, ma è un evento magico. Si va a letto in una specie di mondo e ci si sveglia in un altro del tutto diverso, e se questo non è incanto allora ditemi voi in quale altro luogo posso trovarlo.? J.B. Priestley";
+                document.getElementById("primavara").innerHTML = "In primavera ho contato 136 differenti tipi di tempo all'interno di ventiquattro ore. Mark Twain";
+                document.getElementById("vara").innerHTML = "Un'estate è sempre eccezionale, sia essa calda o fredda, secca o umida. Gustave Flaubert";
+                document.getElementById("toamna").innerHTML = "Finché ci sarà l'autunno, non avrò abbastanza mani, tele e colori per dipingere la bellezza che vedo. Vincent Van Gogh";
+
+                document.getElementById("numar").onclick = GhiciI;
+                document.getElementById("curiozitati").onclick = IntrebariI;
+                document.getElementById("soare").onclick = SteaI;
+                document.getElementById("zapada").onclick = AfiseazaII;
+                document.getElementById("inmugurit").onclick = AfiseazaPI;
+                document.getElementById("cald").onclick = AfiseazaVI;
+                document.getElementById("auriu").onclick = AfiseazaTI;
+
+
+                limba = "it";   
+
+        }
+
+        function GhiciI(){
+        
+                var nr=Math.floor(Math.random() * 100);
+                do{
+                    var p=prompt('Indovina il numero:');
+                    var ghici=parseInt(p);
+                    if(ghici<nr)
+                        alert('Più grande!');
+                    if(ghici>nr)
+                        alert('Più piccolo!');
+                }
+                while(ghici!=nr);
+                        alert('Hai indovinato, sei pronto per il livello successivo?!');
+                    
+        }
+
+        function IntrebariI(){
+
+                var geo=prompt('La catena montuosa delle Alpi passa attraverso la Romania?');
+                var mun=(geo=='no')?"Esatto, la catena montuosa delle Alpi non passa per la Romania!":"L'unica catena montuosa che attraversa la Romania sono i Carpazi!";
+                    alert(mun);
+                        
+                var intrebare=prompt('4*4=?');
+                var raspuns=(intrebare==16)?'Hai risposto correttamente!':'La risposta corretta è 16, la prossima volta cerca di stare più attento!';
+                    alert(raspuns);                        
+
+                var x=prompt('Il Natale si festeggia il...?');
+                var y=(x=='25 dicembre')?"Hai risposto correttamente, il 25 Dicembre tutti i cristiani festeggiano il Natale!":"Il Natale viene celebrato da tutti i cristiani il 25 Dicembre, mentre il 7 Gennaio si festeggia il Natale secondo l'antico rito!";
+                    alert(y);                        
+                        
+                var z1=prompt('20*0=?');
+                var s1=(z1==0)?'Esattamente perché qualsiasi numero moltiplicato per 0 avrà il risultato 0!':'Il risultato di qualsiasi numero moltiplicato per 0 sarà 0, cerca di essere più concentrato!';
+                    alert(s1);                        
+
+                var g=prompt('7*7=?');
+                var n=(g==49)?'Congratulazioni, hai risposto correttamente!':"La risposta è 49, ma ti assicuro che la matematica non è il punto forte di tutti!";
+                    alert(n);
+                        
+                var mat=prompt('1*5*9*7*5*3*0*1*4*7=132.300?');
+                var cup=(mat=='no')?'Congratulazioni, hai risposto correttamente perché qualsiasi numero moltiplicato per 0 avrà il risultato 0!':'Sbagliato, la risposta è no, perché qualsiasi numero moltiplicato per 0 avrà il risultato 0, ma almeno ci hai provato!';
+                    alert(cup);
+                                                
+                var con=prompt('Quale continente manca: Africa, Nord America, Sud America, Antartide, Asia, Australia...');
+                var tin =(con=="L'Europa")?"Congratulazioni, hai risposto correttamente!":"La risposta giusta è L'Europa!";
+                    alert(tin);         
+                        
+                var ever=prompt('Il punto più alto della terra è il picco...');
+                var inal=(ever=="L'Everest")?"Congratulazioni, hai risposto correttamente!":"L'Everest è il picco più alto della terra, fa parte delle montagne dell'Himalaya, con un'altezza di 8848 m!";
+                    alert(inal);
+
+                var flu=prompt("I fiumi più lunghi d'Europa sono: Volga-3.692, Danubio-2.860, Ural-2.428, la lunghezza è misurata in metri o chilometri?");
+                var viu=(flu=='chilometri')?"Congratulazioni, hai risposto correttamente!":"La lunghezza dei fiumi più lunghi d'Europa si misura in chilometri.";
+                    alert(viu);
+      
+        }
+
+        function SteaI(){
+
+                do{
+                    var intreb = prompt("Quanto dista la stella più lontana nell'universo che abbiamo mai visto?");
+                    var a = 3;
+                    var b = 5;
+                    var c = 9;
+                            
+                    if(intreb <=a)
+                        alert("Non dimenticare che stiamo parlando della distanza misurata in anni luce!");
+                    else if(intreb <= b)
+                        alert('Proxima Centauri, è una stella nana rossa che si trova a circa 4,2 anni luce dalla Terra!');
+                    else if(intreb==c)
+                        alert("Icarus è a 9 miliardi di anni luce dal nostro sistema solare, è la stella più lontana dell'universo che abbiamo mai visto!");	
+                }
+                while(intreb!=c);
+        }
+
+        function AfiseazaII(){
+
+                alert("Durante questo periodo la temperatura massima è di 10 \u2103 mentre la minima può raggiungere -20 \u2103! L'inverno è la stagione che permette a tutti noi di tornare bambini!");
+
+        }
+
+        function AfiseazaPI(){
+
+                alert("La primavera è la stagione con una temperatura minima di 11 \u2103 e una massima di 28 \u2103! Dedica del tempo ad ammirare la rinascita della natura!");
+
+        }
+
+        function AfiseazaVI(){
+
+                alert("Le temperature sono comprese tra 25 \u2103 e 42 \u2103! Goditi tutto ciò che l'estate ha da offrire!");
+
+        }
+
+        function AfiseazaTI(){
+
+                alert("La temperatura durante questo periodo è compresa tra 8 \u2103 e 23 \u2103! È autunno, non dimenticare di portare con te un ombrello, perché c'è la possibilità che piova!");
+
+        }
+
+        function Romanian(){
+
+                document.getElementById("titlu").innerHTML= "Curiozitati si Joaca \uD83D\uDE00";
+
+                document.getElementById("ghici").innerHTML = "Secretul geniului este sa duci spiritul copilului pana la batranete, ceea ce inseamna sa nu-ti pierzi niciodata entuziasmul. Aldous Huxley";
+                document.getElementById("numar").innerHTML = "Ghiceste la ce numar ma gandesc!";
+                document.getElementById("intrebari").innerHTML = "Multi dintre cei care esueaza o fac pentru ca nu si-au dat seama cat de aproape au fost de succes inainte de a renunta. Thomas A. Edison";
+                document.getElementById("curiozitati").innerHTML = "Esti pregatit pentru cateva intrebari?";
+                document.getElementById("stele").innerHTML = "Soarele este cea mai apropiata stea de Pamant, pe toate celelalte le vedem sub forma de perdea stralucitoare datorita distantei foarte mari intre stele si Pamant. Stelele au fost studiate inca din cele mai vechi timpuri, ele avand o deosebita importanta asupra oamenilor, indiferent ca vorbim despre practici religioase sau pentru navigatie. In anul 1584 in lucrarea 'De l'infinito universo e mondi', Giordano Bruno a scris ca stelele pot fi alti sori in jurul carora se afla planete, posibil chiar asemanatoare Pamantului.";
+                document.getElementById("soare").innerHTML = "Click aici pentru intrebari legate de \u2728";
+                document.getElementById("iarna").innerHTML = "Prima cadere de zapada nu este doar un eveniment, ci este un eveniment magic. Te culci intr-un fel de lume si te trezesti intr-o alta lume destul de diferita, iar daca asta nu este o incantare, atunci unde ar putea fi gasita? J.B. Priestley";
+                document.getElementById("primavara").innerHTML = "In primavara am numarat 136 de stari diferite ale vremii pe parcursul a 24 de ore. Mark Twain";
+                document.getElementById("vara").innerHTML = "O vara este intotdeauna excepționala, fie ca este calda sau rece, uscata sau umeda. Gustave Flaubert";
+                document.getElementById("toamna").innerHTML = "Cat timp toamna rezista, nu am suficiente maini, panze si culori pentru a picta lucrurile minunate pe care le vad. Vincent Van Gogh";
+
+                document.getElementById("numar").onclick = GhiciRo;
+                document.getElementById("curiozitati").onclick = IntrebariRo;
+                document.getElementById("soare").onclick = SteaRo;
+                document.getElementById("zapada").onclick = AfiseazaIRo;
+                document.getElementById("inmugurit").onclick = AfiseazaPRo;
+                document.getElementById("cald").onclick = AfiseazaVRo;
+                document.getElementById("auriu").onclick = AfiseazaTRo;
+
+                limba = "ro";
+
+        }
+
+        function GhiciRo(){
+
+                var nr=Math.floor(Math.random() * 100);
+                do{
+                    var p=prompt('Ghiceste numarul:');
+                    var ghici=parseInt(p);
+                    if(ghici<nr)
+                        alert('Mai mare!');
+                    if(ghici>nr)
+                        alert('Mai mic!');
+                }
+                while(ghici!=nr);
+                    alert('Ai ghicit, esti pregatit pentru nivelul urmator?!');
+                    
+        }
+
+        function IntrebariRo(){
+
+                var geo=prompt('Lantul muntos Alpi, trece prin Romania?');
+                var mun=(geo=='nu')?'Exact, lantul muntos Alpi nu trece prin Romania!':'Singurul lant muntos care trece prin Romania este format din Muntii Carpati!';
+                    alert(mun);
+
+                var intrebare=prompt('4*4=?');
+                var raspuns=(intrebare==16)?'Ai raspuns corect!':'Raspunsul corect este 16, data viitoare incearca sa fii mai atent!';
+                    alert(raspuns);
+                    
+                var x=prompt('Craciunul se sarbatoreste in data de...?');
+                var y=(x=='25 decembrie')?'Ai raspuns corect, Craciunul este sarbatorit de toti crestinii in data de 25 Decembrie!':'Craciunul este sarbatorit de toti crestinii in data de 25 Decembrie, in timp ce pe 7 Ianuarie se sarbatoreste Craciunul pe rit vechi!';
+                    alert(y);
+                        
+                var z1=prompt('20*0=?');
+                var s1=(z1==0)?'Exact deoarece orice numar inmultit cu 0, va avea rezultatul 0!':'Rezultatul oricarui numar inmultit cu 0 va fii 0, incearca sa fii mai concentrat!';
+                    alert(s1);
+                    
+                var g=prompt('7*7=?');
+                var n=(g==49)?'Felicitari, ai raspuns corect!':'Raspunsul este 49, dar stai linistit matematica nu este punctul forte al tuturor!';
+                    alert(n);
+
+                var mat=prompt('1*5*9*7*5*3*0*1*4*7=132.300?');
+                var cup=(mat=='nu')?'Felicitari, ai raspuns corect pentru ca orice numar inmultit cu 0 va avea rezultatul 0!':'Gresit, raspunsul este nu deoarece orice numar inmultit cu 0 va avea rezultatul 0, dar macar ai incercat!';
+                    alert(cup);
+                    
+                var con=prompt('Ce continent lipseste: Africa, America de Nord, America de Sud, Antarctida, Asia, Australia...');
+                var tin =(con=='Europa')?'Felicitari, ai raspuns corect!':'Raspunsul corect este Europa!';
+                    alert(tin);
+                    
+                var ever=prompt('Cel mai inalt punct de pe pamant este varful..');
+                var inal=(ever=='Everest')?'Felicitari, ai raspuns corect!':'Varful Everest face parte din muntii Himalaya, cu o inaltime de 8848m!';
+                    alert(inal);
+
+                var flu=prompt('Cele mai lungi fluvii din Europa sunt: Volga-3.692, Dunarea-2.860, Ural-2.428, lungimea masurata este in metri sau kilometri?');
+                var viu=(flu=='kilometri')?'Felicitari, ai raspuns corect!':'Lungimea pentru cele mai lungi fluvii din Europa este masurata in kilometri.';
+                    alert(viu);
+                    
+        }
+
+        function SteaRo(){
+
+                do{
+                    var intreb = prompt('La ce distanta se afla cea mai indepartata stea din Univers vazuta de noi?');
+                    var a = 3;
+                    var b = 5;
+                    var c = 9;
+                    
+                    if(intreb <=a)
+                        alert( 'Nu uita ca vorbim de distanta masurata in ani lumina!');
+                    else if(intreb <= b)
+                        alert('Proxima Centauri, este o stea pitica rosie ce se afla la o distanta de aproximativ 4.2 ani lumina de Pamant!');
+                    else if(intreb==c)
+                        alert('Icarus se afla la 9 miliarde de ani-lumina de sistemul nostru solar, este cea mai indepartata stea din Univers vazuta de noi!');	
+                }
+                while(intreb!=c);
+        }
+
+
+        function AfiseazaIRo(){
+
+                alert('In aceasta perioada temperatura maxima este de 10 \u2103 in timp ce minima poate ajunge la -20 \u2103! Iarna, anotimpul care ne permite tuturor sa redevenim copii!');
+
+        }
+
+        function AfiseazaPRo(){
+
+                alert('Primavara este anotimpul cu temperatura minima de 11 \u2103 si maxima de 28 \u2103! Rezerva-ti timp pentru a admira renasterea naturii!');
+
+        }
+
+        function AfiseazaVRo(){
+
+                alert('Temperaturile sunt cuprinse intre 25 \u2103 si 42 \u2103! Bucura-te de tot ce inseamna vara!');
+
+        }
+
+        function AfiseazaTRo(){
+
+                alert("Temperatura in aceasta perioada este cuprinsa intre 8 \u2103 si 23 \u2103! Este toamna, nu uita sa iei o umbrela cu tine, deoarece sunt sanse de ploaie!");
+
+        }
+
+        function Spanish(){
+
+                document.getElementById("titlu").innerHTML= "Curiosidades y Juegos \uD83D\uDE00";
+
+                document.getElementById("ghici").innerHTML = "El secreto de la genialidad es el de conservar el espíritu del niño hasta la vejez, lo cual quiere decir nunca perder el entusiasmo. Aldous Huxley";
+                document.getElementById("numar").innerHTML = "¡Adivina en qué número estoy pensando!";
+                document.getElementById("intrebari").innerHTML = "Muchos de los fracasos de la vida son de personas que no se dan cuenta de lo cerca que estaban del éxito cuando se dieron por vencidos. Thomas A. Edison";
+                document.getElementById("curiozitati").innerHTML = "¿Estás listo para algunas preguntas?";
+                document.getElementById("stele").innerHTML = "El sol es la estrella más cercana a la Tierra, vemos todas las demás en forma de cortina brillante debido a la gran distancia entre las estrellas y la Tierra. Las estrellas han sido estudiadas desde la antigüedad, tienen una especial importancia en las personas, ya sea de prácticas religiosas o de navegación. En 1584, Giordano Bruno escribió que las estrellas pueden ser otros soles alrededor de planetas, posiblemente incluso similares a la Tierra.";
+                document.getElementById("soare").innerHTML = "Haga clic aquí si tiene preguntas sobre \u2728";
+                document.getElementById("iarna").innerHTML = "La primera nevada no es solo un evento, es un evento mágico. Duermes en un tipo de mundo y te despiertas en otro muy diferente, y si eso no es un placer, ¿dónde se puede encontrar? J.B. Priestley";
+                document.getElementById("primavara").innerHTML = "En la primavera he contado 136 distintos tipos de clima dentro de 24 horas. Mark Twain";
+                document.getElementById("vara").innerHTML = "Un verano siempre es excepcional, sea cálido o frío, seco o húmedo. Gustave Flaubert";
+                document.getElementById("toamna").innerHTML = "Mientras dure el otoño, no tendré manos, lienzos y colores suficientes para pintar las cosas hermosas que veo. Vincent Van Gogh";
+
+                document.getElementById("numar").onclick = GhiciS;
+                document.getElementById("curiozitati").onclick = IntrebariS;
+                document.getElementById("soare").onclick = SteaS;
+                document.getElementById("zapada").onclick = AfiseazaIS;
+                document.getElementById("inmugurit").onclick = AfiseazaPS;
+                document.getElementById("cald").onclick = AfiseazaVS;
+                document.getElementById("auriu").onclick = AfiseazaTS;
+
+                limba = "esp";
+
+        }
+
+        function GhiciS(){
+
+                var nr=Math.floor(Math.random() * 100);
+                do{
+                    var p=prompt('Adivina el número:');
+                    var ghici=parseInt(p);
+                    if(ghici<nr)
+                        alert('¡Mayor!');
+                    if(ghici>nr)
+                        alert('¡Menor!');
+                }
+                while(ghici!=nr);
+                    alert('Lo has adivinado, ¿estás listo para el siguiente nivel?');
+                    
+        }
+
+        function IntrebariS(){
+
+                var geo=prompt('¿La cordillera de los Alpes pasa por Rumanía?');
+                var mun=(geo=='no')?'¡Exactamente, la cordillera de los Alpes no pasa por Rumanía!':'¡La única cadena montañosa que pasa por Rumanía son los Cárpatos!';
+                    alert(mun);
+                    
+                var intrebare=prompt('4*4=?');
+                var raspuns=(intrebare==16)?'¡Has respondido correctamente!':'La respuesta correcta es 16, ¡la próxima vez trata de tener más cuidado!';
+                    alert(raspuns);
+
+                var x=prompt('¿La Navidad se celebra el ...?');
+                var y=(x=='25 de Diciembre')?'Has respondido correctamente, ¡todos los cristianos celebran la Navidad el 25 de Diciembre!':'Todos los cristianos celebran la Navidad el 25 de diciembre, mientras que el 7 de enero se celebra la Navidad según el rito antiguo!';
+                    alert(y);
+                    
+                var z1=prompt('20*0=?');
+                var s1=(z1==0)?'¡Exactamente porque cualquier número multiplicado por 0 tendrá el resultado 0!':'El resultado de cualquier número multiplicado por 0 será 0, ¡trata de estar más concentrado!';
+                    alert(s1);
+
+                var g=prompt('7*7=?');
+                var n=(g==49)?'¡Felicitaciones, respondiste correctamente!':'La respuesta es 49, ¡pero tenga la seguridad de que las matemáticas no son la fortaleza de todos!';
+                    alert(n);
+                    
+                var mat=prompt('1*5*9*7*5*3*0*1*4*7=132.300?');
+                var cup=(mat=='no')?'¡Felicitaciones, respondiste correctamente porque cualquier número multiplicado por 0 dará como resultado 0!':'Incorrecto, la respuesta no es porque cualquier número multiplicado por 0 dará como resultado 0, ¡pero al menos lo intentaste!';
+                    alert(cup);
+                    
+                var con=prompt('Qué continente falta: África, América del Norte, América del Sur, Antártida, Asia, Australia ...');
+                var tin =(con=='Europa')?'¡Felicitaciones, respondiste correctamente!':'¡La respuesta correcta es Europa!';
+                    alert(tin);
+                    
+                var ever=prompt('El punto más alto de la tierra es el pico...');
+                var inal=(ever=='Everest')?'¡Felicitaciones, respondiste correctamente!':'Everest Peak es parte del Himalaya, ¡con una altura de 8848 m!';
+                    alert(inal);
+
+                var flu=prompt('Los ríos más largos de Europa son: Volga-3.692, Danubio-2.860, Ural-2.428, ¿la longitud se mide en metros o kilómetros?');
+                var viu=(flu=='kilómetros')?'¡Felicitaciones, respondiste correctamente!':'La longitud de los ríos más largos de Europa se mide en kilómetros.';
+                    alert(viu);
+
+
+        }
+
+        function SteaS(){
+
+                do{
+                    var intreb = prompt('¿Qué tan lejos está la estrella más lejana del universo que jamás hayamos visto?');
+                    var a = 3;
+                    var b = 5;
+                    var c = 9;
+                    
+                    if(intreb <=a)
+                        alert('¡No olvides que estamos hablando de la distancia medida en años luz!');
+                    else if(intreb <= b)
+                        alert('¡Proxima Centauri es una estrella enana roja a unos 4,2 años luz de la Tierra!');
+                    else if(intreb==c)
+                        alert('Ícaro está a 9 mil millones de años luz de nuestro sistema solar, ¡es la estrella más lejana del universo que jamás hayamos visto!');	
+                }
+                while(intreb!=c);
+        }
+
+
+        function AfiseazaIS(){
+
+                alert('¡Durante este período, la temperatura máxima es de 10 \u2103 mientras que la mínima puede llegar a -20 \u2103! ¡Invierno, la temporada que nos permite volver a ser niños!');
+
+        }
+
+        function AfiseazaPS(){
+
+                alert('La primavera es la estación con una temperatura mínima de 11 \u2103 y una máxima de 28 \u2103! ¡Reserve tiempo para admirar el renacimiento de la naturaleza!');
+
+        }
+
+        function AfiseazaVS(){
+
+                alert('¡Las temperaturas están entre 25 \u2103 y 42 \u2103! ¡Disfruta de todo lo que el verano tiene para ofrecer!');
+
+        }
+
+        function AfiseazaTS(){
+
+                alert("¡La temperatura durante este período está entre 8 \u2103 y 23 \u2103! Es otoño, no olvides llevar un paraguas porque hay posibilidades de que llueva!");
+
+        }
+
+        function Portuguese(){
+
+                document.getElementById("titlu").innerHTML= "Curiosidades e Brincar \uD83D\uDE00";
+
+                document.getElementById("ghici").innerHTML = "O segredo da genialidade é levar o espírito da criança até a velhice, o que significa nunca perder o entusiasmo. Aldous Huxley";
+                document.getElementById("numar").innerHTML = "Adivinha em que número estou pensando!";
+                document.getElementById("intrebari").innerHTML = "Muitos que falham o fazem porque não percebem o quão perto estavam do sucesso antes de desistir. Thomas A. Edison";
+                document.getElementById("curiozitati").innerHTML = "Você está pronto para algumas perguntas?";
+                document.getElementById("stele").innerHTML = "O sol é a estrela mais próxima da Terra, vemos todas as outras na forma de uma cortina brilhante devido à grande distância entre as estrelas e a Terra. As estrelas são estudadas desde a antiguidade, têm uma importância especial nas pessoas, quer se trate de práticas religiosas ou de navegação. Em 1584, Giordano Bruno escreveu que as estrelas podem ser outros sóis em torno de planetas, possivelmente até parecidos com a Terra.";
+                document.getElementById("soare").innerHTML = "Clique aqui se tiver perguntas sobre \u2728";
+                document.getElementById("iarna").innerHTML = "A primeira neve não é apenas um evento, é um evento mágico. Você dorme em um tipo de mundo e acorda em um muito diferente, e se isso não for um prazer, onde você pode encontrá-lo? J.B. Priestley";
+                document.getElementById("primavara").innerHTML = "Na primavera, contei 136 tipos diferentes de clima em 24 horas. Mark Twain";
+                document.getElementById("vara").innerHTML = "Um verão é sempre excepcional, seja ele quente ou frio, seco ou úmido. Gustave Flaubert";
+                document.getElementById("toamna").innerHTML = "Enquanto durar o outono, não terei mãos, telas e cores suficientes para pintar as coisas bonitas que vejo. Vincent van Gogh";
+
+                document.getElementById("numar").onclick = GhiciP;
+                document.getElementById("curiozitati").onclick = IntrebariP;
+                document.getElementById("soare").onclick = SteaP;
+                document.getElementById("zapada").onclick = AfiseazaIP;
+                document.getElementById("inmugurit").onclick = AfiseazaPP;
+                document.getElementById("cald").onclick = AfiseazaVP;
+                document.getElementById("auriu").onclick = AfiseazaTP;
+
+                limba = "pt";
+
+        }
+
+        function GhiciP(){
+
+                var nr=Math.floor(Math.random() * 100);
+                do{
+                    var p=prompt('Adivinhe o número:');
+                    var ghici=parseInt(p);
+                    if(ghici<nr)
+                        alert('Mais alto!');
+                    if(ghici>nr)
+                        alert('Menos!');
+                }
+                while(ghici!=nr);
+                    alert('Você adivinhou, você está pronto para o próximo nível?'); 
+            
+        }
+
+        function IntrebariP(){
+
+                var geo=prompt('A cordilheira dos Alpes passa pela Romênia?');
+                var mun=(geo=='não')?'Exatamente, a cordilheira dos Alpes não passa pela Romênia!':'A única cordilheira que atravessa a Romênia são os Cárpatos!';
+                    alert(mun);
+                    
+                var intrebare=prompt('4*4=?');
+                var raspuns=(intrebare==16)?'Você respondeu corretamente!':'A resposta correta é 16, da próxima vez tente ser mais cuidadoso!';
+                    alert(raspuns);
+                    
+                var x=prompt('O Natal é comemorado em ...?');
+                var y=(x=='25 de Dezembro')?'Você respondeu corretamente, todos os cristãos celebram o Natal em 25 de Dezembro!':'O Natal é celebrado por todos os cristãos no dia 25 de dezembro, enquanto no dia 7 de janeiro o Natal é celebrado segundo o antigo rito!';
+                    alert(y);
+                    
+                var z1=prompt('20*0=?');
+                var s1=(z1==0)?'Exatamente porque qualquer número multiplicado por 0 terá como resultado 0!':'O resultado de qualquer número multiplicado por 0 será 0, tente ser mais focado!';
+                    alert(s1);
+                    
+                var g=prompt('7*7=?');
+                var n=(g==49)?'Parabéns, você respondeu corretamente!':'A resposta é 49, mas fique tranquilo, a matemática não é o ponto forte de todos!';
+                    alert(n);
+                    
+                var mat=prompt('1*5*9*7*5*3*0*1*4*7=132.300?');
+                var cup=(mat=='não')?'Parabéns, você respondeu corretamente porque qualquer número multiplicado por 0 resultará em 0!':'Errado, a resposta não é porque qualquer número multiplicado por 0 resultará em 0, mas pelo menos você tentou!';
+                    alert(cup);
+                    
+                var con=prompt('Que continente está faltando: África, América do Norte, América do Sul, Antártica, Ásia, Austrália ...');
+                var tin =(con=='Europa')?'Parabéns, você respondeu corretamente!':'A resposta correta é Europa!';
+                    alert(tin);
+    
+                var ever=prompt('O ponto mais alto da terra é o pico ...');
+                var inal=(ever=='Everest')?'Parabéns, você respondeu corretamente!':'O pico do Everest faz parte do Himalaia, com uma altura de 8.848 m!';
+                    alert(inal);
+
+                var flu=prompt('Os maiores rios da Europa são: Volga-3.692, Danúbio-2.860, Ural-2.428, o comprimento é medido em metros ou quilômetros?');
+                var viu=(flu=='quilômetros')?'Parabéns, você respondeu corretamente!':'O comprimento dos maiores rios da Europa é medido em quilômetros.';
+                    alert(viu);
+      
+
+        }       
+
+        function SteaP(){
+
+                do{
+                    var intreb = prompt('Quão longe está a estrela mais distante do universo que já vimos?');
+                    var a = 3;
+                    var b = 5;
+                    var c = 9;
+                    
+                    if(intreb <=a)
+                        alert('Não se esqueça que estamos falando sobre a distância medida em anos-luz!');
+                    else if(intreb <= b)
+                        alert('Proxima Centauri é uma estrela anã vermelha a cerca de 4,2 anos-luz da Terra!');
+                    else if(intreb==c)
+                        alert('Ícaro está a 9 bilhões de anos-luz de nosso sistema solar, é a estrela mais distante do universo que já vimos!');	
+                    }
+                while(intreb!=c);
+        }
+
+
+        function AfiseazaIP(){
+
+                alert('Durante este período, a temperatura máxima é de 10 \u2103, enquanto a mínima pode chegar a -20 \u2103! Inverno, a estação que nos permite voltar a ser crianças!');
+
+        }
+
+        function AfiseazaPP(){
+
+                alert('A primavera é a estação com temperatura mínima de 11 \u2103 e máxima de 28 \u2103! Reserve um tempo para admirar o renascimento da natureza!');
+
+        }
+
+        function AfiseazaVP(){
+
+                    alert('As temperaturas estão entre 25 \u2103 e 42 \u2103! Aproveite tudo o que o verão tem a oferecer!');
+
+        }
+
+        function AfiseazaTP(){
+
+                    alert("A temperatura durante este período está entre 8 \u2103 e 23 \u2103! É outono, não se esqueça de trazer um guarda-chuva, pois pode chover!");
+
+        }   
+    </script>
+</head>
+<body>
+    <div class="logo">
+        <a href="#"><div class="lang-menu"></a>
+           <div class="selected-lang"><span style='font-size:30px;'>&#128072;</span>
+            </div>
+            <nav>
+                <ul>
+                    <li>
+                        <a href ="#" class="us" onclick="English()">English</a>
+                    </li>
+
+                    <li>
+                        <a href ="#" class="de" onclick="Germana()">Deutsch</a>
+                    </li>
+
+                    <li>
+                        <a href ="#" class="fr" onclick="French()">Français</a>
+                    </li>
+                    <li>
+                        <a href ="#" class="it" onclick="Italian()">Italiano</a>
+                    </li>
+
+                    <li>
+                        <a href ="#" class="ro" onclick="Romanian()" >Romana</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="es" onclick="Spanish()">Español</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="pt" onclick="Portuguese()">Português</a>
+                    </li>      
+                </ul>
+            </nav>
+    </div>
+</div> 
+       
+    <h1 id="titlu">Curiozitati si Joaca &#x1F600;</h1>
+
+    <div class="first">
+
+        <div class="card">
+            <img src="https://cdn.pixabay.com/photo/2020/09/23/03/54/background-5594879__480.jpg" alt="" style="width:100%">
+                <p id="ghici">Secretul geniului este sa duci spiritul copilului pana la batranete, ceea ce inseamna sa nu-ti pierzi niciodata entuziasmul. Aldous Huxley</p>
+                    <button id="numar" class="but" onclick="Ghici()">Ghiceste la ce numar ma gandesc!</button>
+        </div>
+
+        <div class="card">
+            <img src="https://cdn.pixabay.com/photo/2016/03/13/21/26/binary-1254502__480.png" alt="" style="width:100%">
+                <p id="intrebari">Multi dintre cei care esueaza o fac pentru ca nu si-au dat seama cat de aproape au fost de succes inainte de a renunta. Thomas A. Edison</p>
+                        <button id="curiozitati" class="but" onclick="Intrebari()">Esti pregatit pentru cateva intrebari?</button>
+        </div>
+
+        <div class="card">
+            <img src="https://cdn.pixabay.com/photo/2018/08/14/13/23/ocean-3605547__480.jpg" alt="" style="width:100%">
+                <p id="stele">Soarele este cea mai apropiata stea de Pamant, pe toate celelalte le vedem sub forma de perdea stralucitoare datorita distantei foarte mari intre stele si Pamant. Stelele au fost studiate inca din cele mai vechi timpuri, ele avand o deosebita importanta asupra oamenilor, indiferent ca vorbim despre practici religioase sau pentru navigatie. In anul 1584 in lucrarea 'De l'infinito universo e mondi', Giordano Bruno a scris ca stelele pot fi alti sori in jurul carora se afla planete, posibil chiar asemanatoare Pamantului.</p>
+                    <button id="soare" class="but" onclick="Stea()">Click aici pentru intrebari legate de <span style='font-size:20px;'>&#10024;</span></button>
+        </div>
+    
+        <div class="card">
+            <img src="https://i.ytimg.com/vi/ViYUPpDS41c/maxresdefault.jpg" alt="" style="width:100%">
+                <p id="iarna">Prima cadere de zapada nu este doar un eveniment, ci este un eveniment magic. Te culci intr-un fel de lume si te trezesti intr-o alta lume destul de diferita, iar daca asta nu este o incantare, atunci unde ar putea fi gasita? J.B. Priestley</p>
+                    <button id="zapada" class="but" onclick="AfiseazaI()">Click!<span>&#128072;</span></button>
+        </div>
+
+        <div class="card">
+            <img src="https://newtrip.ro/wp-content/uploads/2020/04/imagine-de-primavara.jpg" alt="" style="width:100%" >
+                <p id="primavara">In primavara am numarat 136 de stari diferite ale vremii pe parcursul a 24 de ore. Mark Twain </p>
+                    <button id="inmugurit" class="but" onclick="AfiseazaP()">Click!<span>&#128072;</span></button>
+        </div>
+
+        <div class="card">
+            <img src="https://cdn.wallpapersafari.com/35/32/37QDqO.jpg" alt="" style="width:100%" >
+                <p id="vara">O vara este intotdeauna exceptionala, fie ca este calda sau rece, uscata sau umeda. Gustave Flaubert</p>
+                    <button id="cald" class="but" onclick="AfiseazaV()">Click!<span>&#128072;</span></button>
+        </div>
+
+        <div class="card">
+            <img src="https://teratai.shop/wp-content/uploads/2020/09/pregtire_toamna_01.png" alt="" style="width:100%" >
+                <p id="toamna"> Cat timp toamna rezista, nu am suficiente maini, panze si culori pentru a picta lucrurile minunate pe care le vad. Vincent Van Gogh</p>
+                    <button id="auriu" class="but" onclick="AfiseazaT()">Click!<span>&#128072;</span></button>
+        </div>
+
+    </div>
+
+    <script>
+
+        Search();
+        getLocaleLanguage();
+
+    </script>
+
+</body>
+</html>
